@@ -1,4 +1,4 @@
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
@@ -61,6 +61,28 @@ const FallbackComponent = () => (
 
 const ModelViewer = () => {
   const [error, setError] = useState(null);
+  const canvasRef = useRef(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+
+  useEffect(() => {
+    const handleWheel = (e) => {
+      if (!isInteracting) {
+        e.stopPropagation();
+        window.scrollBy(0, e.deltaY);
+      }
+    };
+
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener("wheel", handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (canvas) {
+        canvas.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, [isInteracting]);
 
   const handleError = (error) => {
     console.error("Error in ModelViewer:", error);
@@ -73,7 +95,12 @@ const ModelViewer = () => {
 
   return (
     <div className="relative">
-      <div className="h-[80vh] w-full">
+      <div
+        className="h-[80vh] w-full"
+        ref={canvasRef}
+        onMouseEnter={() => setIsInteracting(true)}
+        onMouseLeave={() => setIsInteracting(false)}
+      >
         <ErrorBoundary
           FallbackComponent={FallbackComponent}
           onError={handleError}
