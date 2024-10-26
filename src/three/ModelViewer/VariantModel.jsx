@@ -16,6 +16,7 @@ const Model = ({ zoom = 1, modelPath, isMobile }) => {
   const group = useRef();
   const { scene } = useGLTF(modelPath);
 
+  // Auto-rotation animation for mobile
   useFrame((state) => {
     if (isMobile) {
       group.current.rotation.y += 0.005;
