@@ -16,10 +16,9 @@ const Model = ({ zoom = 1, modelPath, isMobile }) => {
   const group = useRef();
   const { scene } = useGLTF(modelPath);
 
-  // Auto-rotation animation for mobile
   useFrame((state) => {
     if (isMobile) {
-      group.current.rotation.y += 0.005; // Adjust speed as needed
+      group.current.rotation.y += 0.005;
     }
   });
 
@@ -59,8 +58,10 @@ const ModelCanvas = ({
   modelPath,
   adjustCamera = false,
   isVisible,
+  isTouchActive,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const canvasRef = useRef();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -78,13 +79,17 @@ const ModelCanvas = ({
 
   return (
     <Canvas
+      ref={canvasRef}
       camera={{
         position: cameraPosition,
         fov: 50,
         near: 0.1,
         far: 1000,
       }}
-      style={{ background: "transparent" }}
+      style={{
+        background: "transparent",
+        touchAction: isTouchActive ? "none" : "auto",
+      }}
       dpr={[1, 2]}
     >
       <Stage
@@ -133,6 +138,7 @@ const FallbackComponent = () => (
 
 const LazyModelContainer = ({ variant, index }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isTouchActive, setIsTouchActive] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -165,7 +171,9 @@ const LazyModelContainer = ({ variant, index }) => {
   return (
     <div
       ref={containerRef}
-      className="relative border-[2px] hover:bg-red-500 hover:text-black text-red-500 border-red-500 h-[40vh] md:h-[60vh] w-full rounded-lg overflow-hidden shadow-lg touch-none"
+      className="relative border-[2px] hover:bg-red-500 hover:text-black text-red-500 border-red-500 h-[40vh] md:h-[60vh] w-full rounded-lg overflow-hidden shadow-lg"
+      onTouchStart={() => setIsTouchActive(true)}
+      onTouchEnd={() => setIsTouchActive(false)}
     >
       <div className="absolute top-2 left-2 hover:text-black z-10 uppercase bangers-regular px-2 py-1 rounded">
         {variant.label}
@@ -177,6 +185,7 @@ const LazyModelContainer = ({ variant, index }) => {
           modelPath={variant.modelPath}
           adjustCamera={variant.adjustCamera}
           isVisible={isVisible}
+          isTouchActive={isTouchActive}
         />
       </ErrorBoundary>
     </div>
@@ -232,7 +241,7 @@ const ModelViewer = () => {
   ];
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-visible">
       <h1 className="text-2xl md:text-[10rem] mb-16 text-center font-bold text-red-500 uppercase bangers-regular opacity-90 hover:text-red-600">
         {displayedText}
       </h1>
