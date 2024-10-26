@@ -7,10 +7,11 @@ import Contact from "../Contact/Contact";
 import UpgradeGun from "../Upgrade/Upgrade";
 import Brands from "../Brands/Brands";
 import { Variants } from "../Variants/Variants";
+import OfferSale from "../Offer/OfferSale";
 
 const Home = () => {
   const [isModelActive, setIsModelActive] = useState(false);
-
+  const mobile = window.innerWidth <= 768;
   return (
     <div className="bg-black text-white overflow-hidden">
       <section className="relative min-h-screen flex items-center justify-center">
@@ -22,16 +23,17 @@ const Home = () => {
         />
 
         <div className="container mx-auto px-4 relative">
-          {/* Text Layer (Behind) */}
           <div className="absolute inset-0 flex items-center justify-center z-0">
             <div className="text-center">
-              <h1 className="text-2xl md:text-[46rem] font-bold text-red-500 uppercase bangers-regular opacity-90 m-2">
-                <GiChaingun className="animate-spin" />
-              </h1>
+              {!mobile && (
+                <h1 className="text-2xl md:text-[46rem] font-bold text-red-500 uppercase bangers-regular opacity-90 m-2">
+                  <GiChaingun className="animate-spin" />
+                </h1>
+              )}
             </div>
           </div>
 
-          {/* 3D Model Layer (Front) */}
+
           <div className="relative z-10">
             <div className="absolute inset-0 flex items-center justify-center">
               <div
@@ -55,6 +57,7 @@ const Home = () => {
       <Hero />
       <Variants />
       <Brands />
+      <OfferSale />
       <UpgradeGun />
       <Contact />
     </div>

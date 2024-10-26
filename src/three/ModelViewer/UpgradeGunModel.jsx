@@ -15,8 +15,6 @@ const Model = ({ zoom = 0 }) => {
   const { scene } = useGLTF(glbFile);
 
   useFrame((state) => {
-    // Increased the multiplier from 0.3 to 0.8 for faster rotation
-    // Increased the amplitude from 0.1 to 0.15 for wider rotation range
     group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.15;
   });
 
@@ -56,12 +54,12 @@ const FallbackComponent = () => (
   </div>
 );
 
-const UpdateGunModel = () => {
+const UpdateGunModel = ({ isActive }) => {
   return (
-    <div className="relative h-[60vh] w-full rounded-lg overflow-hidden shadow-lg">
-      <div className="absolute top-2 left-2 hover:text-black z-10 uppercase bangers-regular px-2 py-1 rounded">
-        Trijicon 5X
-      </div>
+    <div
+      className="relative h-[60vh] w-full rounded-lg overflow-hidden shadow-lg"
+      style={{ pointerEvents: isActive ? "auto" : "none" }}
+    >
       <ErrorBoundary FallbackComponent={FallbackComponent}>
         <Canvas
           camera={{
@@ -75,6 +73,7 @@ const UpdateGunModel = () => {
         >
           <PresentationControls
             global
+            enabled={isActive}
             zoom={0.8}
             rotation={[0, -Math.PI / 6, 0]}
             polar={[-Math.PI / 2, Math.PI / 2]}
@@ -104,9 +103,10 @@ const UpdateGunModel = () => {
           <pointLight position={[-10, -10, -10]} intensity={0.4} />
           <pointLight position={[10, 0, -10]} color="#ff0000" intensity={0.4} />
           <OrbitControls
-            enablePan={true}
-            enableZoom={true}
-            enableRotate={true}
+            enabled={isActive}
+            enablePan={isActive}
+            enableZoom={isActive}
+            enableRotate={isActive}
             maxPolarAngle={Math.PI - 0.5}
             minPolarAngle={0.2}
             maxDistance={30}

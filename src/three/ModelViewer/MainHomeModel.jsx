@@ -66,7 +66,7 @@ const ModelViewer = ({ isActive }) => {
   useEffect(() => {
     const handleScroll = (e) => {
       if (!isActive) {
-        return; // Allow normal scrolling when model is not active
+        return;
       }
     };
 

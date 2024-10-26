@@ -9,22 +9,18 @@ import {
 } from "@react-three/drei";
 import { ErrorBoundary } from "react-error-boundary";
 
-// Import the GLB file directly
 import glbFile from "/src/assets/images/wolf_cola.glb";
 
 const Model = () => {
   const group = useRef();
   const { scene } = useGLTF(glbFile);
 
-  // Add subtle rotation animation
   useFrame((state) => {
     group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
   });
 
-  // Clone the scene to avoid mutations
   const clonedScene = scene.clone();
 
-  // Enhance materials if they exist
   clonedScene.traverse((node) => {
     if (node.isMesh) {
       if (node.material) {
@@ -32,12 +28,10 @@ const Model = () => {
         node.material.metalness = 0.8;
         node.material.envMapIntensity = 1.5;
 
-        // If it's the main can body, ensure red color
         if (node.name.toLowerCase().includes("body")) {
-          node.material.color.setHex(0xff0000); // Coca-Cola red
+          node.material.color.setHex(0xff0000);
         }
 
-        // If it's the logo or text, ensure white color
         if (
           node.name.toLowerCase().includes("logo") ||
           node.name.toLowerCase().includes("text")
@@ -52,8 +46,8 @@ const Model = () => {
     <group ref={group}>
       <primitive
         object={clonedScene}
-        scale={[2.5, 2.5, 2.5]} // Decrease scale for a smaller model
-        position={[0, -1, 0]} // Adjust position to raise the can up
+        scale={[2.5, 2.5, 2.5]}
+        position={[0, -1, 0]}
       />
     </group>
   );
@@ -87,7 +81,7 @@ const ModelViewerNewEdiction = () => {
           <Canvas
             camera={{ position: [0, 0, 10], fov: 45 }}
             style={{ background: "transparent" }}
-            dpr={[1, 2]} // Better quality on retina displays
+            dpr={[1, 2]}
           >
             <PresentationControls
               global
@@ -102,10 +96,8 @@ const ModelViewerNewEdiction = () => {
               </Stage>
             </PresentationControls>
 
-            {/* Add realistic environment lighting */}
             <Environment preset="sunset" background={false} />
 
-            {/* Enhanced lighting setup */}
             <ambientLight intensity={0.7} />
             <spotLight
               position={[10, 10, 10]}
@@ -116,7 +108,6 @@ const ModelViewerNewEdiction = () => {
             />
             <pointLight position={[-10, -10, -10]} intensity={0.5} />
 
-            {/* Add rim light for better definition */}
             <pointLight
               position={[10, 0, -10]}
               color="#ff0000"
@@ -139,7 +130,6 @@ const ModelViewerNewEdiction = () => {
   );
 };
 
-// Preload the model
 useGLTF.preload(glbFile);
 
 export default ModelViewerNewEdiction;

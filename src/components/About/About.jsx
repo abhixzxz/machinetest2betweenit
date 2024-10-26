@@ -60,7 +60,7 @@ const About = () => {
     },
     hover: {
       scale: 1.05,
-      backgroundColor: "rgb(31, 41, 55)", 
+      backgroundColor: "rgb(31, 41, 55)",
       transition: {
         duration: 0.3,
       },
@@ -69,7 +69,6 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-black pt-24">
-      {/* Hero Section */}
       <div className="container mx-auto px-4 overflow-hidden">
         <motion.h1
           initial={{ opacity: 0, scale: 0.5 }}
@@ -88,7 +87,6 @@ const About = () => {
           ABOUT US
         </motion.h1>
 
-
         <motion.div
           ref={missionRef}
           initial="hidden"
@@ -104,14 +102,13 @@ const About = () => {
           </motion.h2>
           <motion.p
             variants={itemVariants}
-            className="text-gray-300 text-lg md:text-xl leading-relaxed bg-transparent"
+            className="text-xs md:text-xl text-gray-300 leading-relaxed bg-transparent"
           >
             BulletForge stands at the forefront of precision ammunition retail,
             combining tradition with innovation. Our commitment to quality and
             safety sets the standard in the industry.
           </motion.p>
         </motion.div>
-
 
         <motion.div
           ref={featuresRef}
@@ -139,12 +136,14 @@ const About = () => {
               variants={featureCardVariants}
               whileHover="hover"
               className="bg-gray-900 p-8 rounded-lg shadow-xl"
-              style={{ backgroundColor: "rgb(17, 24, 39)" }} 
+              style={{ backgroundColor: "rgb(17, 24, 39)" }}
             >
               <h3 className="text-2xl text-red-500 bangers-regular mb-4 bg-transparent">
                 {feature.title}
               </h3>
-              <p className="text-gray-400 bg-transparent">{feature.text}</p>
+              <p className="text-xs md:text-base text-gray-400 bg-transparent">
+                {feature.text}
+              </p>
             </motion.div>
           ))}
         </motion.div>
@@ -160,7 +159,7 @@ const About = () => {
           <motion.div
             variants={itemVariants}
             className="bg-gray-900 p-8 md:p-12 rounded-lg shadow-xl"
-            style={{ backgroundColor: "rgb(17, 24, 39)" }} 
+            style={{ backgroundColor: "rgb(17, 24, 39)" }}
           >
             <motion.h2
               variants={headingVariants}
@@ -170,12 +169,12 @@ const About = () => {
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-transparent">
               <motion.div variants={itemVariants} className="bg-transparent">
-                <p className="text-gray-300 text-lg leading-relaxed mb-6 bg-transparent">
+                <p className="text-xs md:text-lg text-gray-300 leading-relaxed mb-6 bg-transparent">
                   With over a decade of experience in the ammunition industry,
                   BulletForge has established itself as a trusted name among
                   enthusiasts and professionals alike.
                 </p>
-                <p className="text-gray-300 text-lg leading-relaxed bg-transparent">
+                <p className="text-xs md:text-lg text-gray-300 leading-relaxed bg-transparent">
                   Our dedication to customer satisfaction and safety has earned
                   us recognition as an industry leader in ammunition retail.
                 </p>
@@ -194,7 +193,7 @@ const About = () => {
                     <span className="text-4xl md:text-5xl text-red-500 bangers-regular bg-transparent">
                       {stat.number}
                     </span>
-                    <span className="text-gray-400 text-lg bg-transparent">
+                    <span className="text-xs md:text-lg text-gray-400 bg-transparent">
                       {stat.text}
                     </span>
                   </motion.div>
@@ -219,7 +218,7 @@ const About = () => {
           </motion.h2>
           <motion.p
             variants={itemVariants}
-            className="text-gray-300 text-lg md:text-xl leading-relaxed bg-transparent"
+            className="text-xs md:text-xl text-gray-300 leading-relaxed bg-transparent"
           >
             At BulletForge, we're more than just a retailer. We're committed to
             promoting responsible ownership, providing education, and ensuring
