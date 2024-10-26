@@ -8,6 +8,7 @@ import UpgradeGun from "../Upgrade/Upgrade";
 import Brands from "../Brands/Brands";
 import { Variants } from "../Variants/Variants";
 import OfferSale from "../Offer/OfferSale";
+import manImg from "../../assets/images/manabout.png";
 
 const Home = () => {
   const [isModelActive, setIsModelActive] = useState(false);
@@ -40,7 +41,12 @@ const Home = () => {
                 onMouseDown={() => setIsModelActive(true)}
                 onMouseLeave={() => setIsModelActive(false)}
               >
-                <ModelViewer isActive={isModelActive} />
+                {!mobile ? (
+                  <ModelViewer isActive={isModelActive} />
+                ) : (
+                  <img src={manImg} alt="manImg" />
+                )}
+
                 {!isModelActive && !mobile && (
                   <div className="absolute inset-0 flex items-center justify-center bg-transparent cursor-pointer">
                     <span className="text-white text-sm bg-red-500 bg-opacity-70 px-4 py-2 rounded-full">
