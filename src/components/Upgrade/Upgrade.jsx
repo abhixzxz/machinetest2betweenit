@@ -8,6 +8,7 @@ const UpgradeGun = () => {
   const fullText = "WANNA UPGRADE YOUR GUN?";
   const typingSpeed = 100;
   const [isModelActive, setIsModelActive] = useState(false);
+  const mobile = window.innerWidth <= 768;
 
   useEffect(() => {
     let currentIndex = 0;
@@ -51,7 +52,7 @@ const UpgradeGun = () => {
         >
           <UpdateGunModel isActive={isModelActive} />
         </Suspense>
-        {!isModelActive && (
+        {!isModelActive && !mobile && (
           <div className="absolute inset-0 flex items-center justify-center bg-transparent cursor-pointer">
             <span className="text-white text-sm bg-red-500 bg-opacity-70 px-4 py-2 rounded-full">
               Click to interact with 3D model
