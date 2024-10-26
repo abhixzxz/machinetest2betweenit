@@ -62,10 +62,20 @@ const FallbackComponent = () => (
 const ModelViewer = ({ isActive }) => {
   const [error, setError] = useState(null);
   const canvasRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = (e) => {
-      if (!isActive) {
+      if (!isActive || isMobile) {
         return;
       }
     };
@@ -80,7 +90,7 @@ const ModelViewer = ({ isActive }) => {
         canvas.removeEventListener("wheel", handleScroll);
       }
     };
-  }, [isActive]);
+  }, [isActive, isMobile]);
 
   const handleError = (error) => {
     console.error("Error in ModelViewer:", error);
@@ -96,7 +106,10 @@ const ModelViewer = ({ isActive }) => {
       <div
         className="h-[80vh] w-full"
         ref={canvasRef}
-        style={{ pointerEvents: isActive ? "auto" : "none" }}
+        style={{
+          pointerEvents: isActive && !isMobile ? "auto" : "none",
+          cursor: isMobile ? "default" : "auto",
+        }}
       >
         <ErrorBoundary
           FallbackComponent={FallbackComponent}
@@ -114,7 +127,7 @@ const ModelViewer = ({ isActive }) => {
           >
             <PresentationControls
               global
-              enabled={isActive}
+              enabled={isActive && !isMobile}
               zoom={1}
               rotation={[0, -Math.PI / 6, 0]}
               polar={[-Math.PI / 2, Math.PI / 2]}
@@ -151,10 +164,10 @@ const ModelViewer = ({ isActive }) => {
             />
 
             <OrbitControls
-              enabled={isActive}
-              enablePan={isActive}
-              enableZoom={isActive}
-              enableRotate={isActive}
+              enabled={isActive && !isMobile}
+              enablePan={isActive && !isMobile}
+              enableZoom={isActive && !isMobile}
+              enableRotate={isActive && !isMobile}
               maxPolarAngle={Math.PI - 0.5}
               minPolarAngle={0.2}
               maxDistance={15}
@@ -164,6 +177,13 @@ const ModelViewer = ({ isActive }) => {
           </Canvas>
         </ErrorBoundary>
       </div>
+      {isMobile && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-white text-sm bg-red-500 bg-opacity-70 px-4 py-2 rounded-full">
+            3D interaction available on desktop only
+          </span>
+        </div>
+      )}
     </div>
   );
 };
