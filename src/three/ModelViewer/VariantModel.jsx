@@ -12,12 +12,15 @@ import glbFile from "/src/assets/images/equpment1.glb";
 import variant2 from "/src/assets/images/variant2.glb";
 import variant3 from "/src/assets/images/variant4.glb";
 
-const Model = ({ zoom = 1, modelPath }) => {
+const Model = ({ zoom = 1, modelPath, isMobile }) => {
   const group = useRef();
   const { scene } = useGLTF(modelPath);
 
+  // Auto-rotation animation for mobile
   useFrame((state) => {
-    group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+    if (isMobile) {
+      group.current.rotation.y += 0.005; // Adjust speed as needed
+    }
   });
 
   const clonedScene = scene.clone();
@@ -57,6 +60,18 @@ const ModelCanvas = ({
   adjustCamera = false,
   isVisible,
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   if (!isVisible) {
     return <div className="w-full h-full bg-black" />;
   }
@@ -72,26 +87,17 @@ const ModelCanvas = ({
       style={{ background: "transparent" }}
       dpr={[1, 2]}
     >
-      <PresentationControls
-        global
-        zoom={1}
-        rotation={[0, -Math.PI / 6, 0]}
-        polar={[-Math.PI / 2, Math.PI / 2]}
-        azimuth={[-Math.PI / 2, Math.PI / 2]}
-        config={{ mass: 2, tension: 400 }}
+      <Stage
+        environment="city"
+        intensity={0.6}
+        contactShadow={false}
+        adjustCamera={adjustCamera}
+        preset="rembrandt"
       >
-        <Stage
-          environment="city"
-          intensity={0.6}
-          contactShadow={false}
-          adjustCamera={adjustCamera}
-          preset="rembrandt"
-        >
-          <Suspense fallback={null}>
-            <Model zoom={zoom} modelPath={modelPath} />
-          </Suspense>
-        </Stage>
-      </PresentationControls>
+        <Suspense fallback={null}>
+          <Model zoom={zoom} modelPath={modelPath} isMobile={isMobile} />
+        </Suspense>
+      </Stage>
       <Environment preset="sunset" background={false} />
       <ambientLight intensity={0.5} />
       <spotLight
@@ -103,16 +109,18 @@ const ModelCanvas = ({
       />
       <pointLight position={[-10, -10, -10]} intensity={0.4} />
       <pointLight position={[10, 0, -10]} color="#ff0000" intensity={0.4} />
-      <OrbitControls
-        enablePan={true}
-        enableZoom={true}
-        enableRotate={true}
-        maxPolarAngle={Math.PI - 0.5}
-        minPolarAngle={0.2}
-        maxDistance={15}
-        minDistance={4}
-        target={[0, 0, 0]}
-      />
+      {!isMobile && (
+        <OrbitControls
+          enablePan={true}
+          enableZoom={true}
+          enableRotate={true}
+          maxPolarAngle={Math.PI - 0.5}
+          minPolarAngle={0.2}
+          maxDistance={15}
+          minDistance={4}
+          target={[0, 0, 0]}
+        />
+      )}
     </Canvas>
   );
 };
@@ -157,7 +165,7 @@ const LazyModelContainer = ({ variant, index }) => {
   return (
     <div
       ref={containerRef}
-      className="relative border-[2px] hover:bg-red-500 hover:text-black text-red-500 border-red-500 h-[40vh] md:h-[60vh] w-full rounded-lg overflow-hidden shadow-lg"
+      className="relative border-[2px] hover:bg-red-500 hover:text-black text-red-500 border-red-500 h-[40vh] md:h-[60vh] w-full rounded-lg overflow-hidden shadow-lg touch-none"
     >
       <div className="absolute top-2 left-2 hover:text-black z-10 uppercase bangers-regular px-2 py-1 rounded">
         {variant.label}
@@ -224,7 +232,7 @@ const ModelViewer = () => {
   ];
 
   return (
-    <>
+    <div className="overflow-hidden">
       <h1 className="text-2xl md:text-[10rem] mb-16 text-center font-bold text-red-500 uppercase bangers-regular opacity-90 hover:text-red-600">
         {displayedText}
       </h1>
@@ -235,12 +243,8 @@ const ModelViewer = () => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
-};
-
-const preloadModels = () => {
-  [glbFile, variant2, variant3].forEach((path) => useGLTF.preload(path));
 };
 
 export default ModelViewer;
