@@ -33,7 +33,6 @@ const Home = () => {
             </div>
           </div>
 
-
           <div className="relative z-10">
             <div className="absolute inset-0 flex items-center justify-center">
               <div
@@ -42,7 +41,7 @@ const Home = () => {
                 onMouseLeave={() => setIsModelActive(false)}
               >
                 <ModelViewer isActive={isModelActive} />
-                {!isModelActive && (
+                {!isModelActive && !mobile && (
                   <div className="absolute inset-0 flex items-center justify-center bg-transparent cursor-pointer">
                     <span className="text-white text-sm bg-red-500 bg-opacity-70 px-4 py-2 rounded-full">
                       Click to interact with 3D model
