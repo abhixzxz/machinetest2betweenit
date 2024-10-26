@@ -3,6 +3,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Stage, Environment, useGLTF } from "@react-three/drei";
 import { ErrorBoundary } from "react-error-boundary";
 
+// Lazy load the GLB file
 const glbFile = "/src/assets/images/offersale.glb";
 
 const Model = () => {
@@ -97,6 +98,7 @@ const OfferSaleModel = () => {
   );
 };
 
+// Preload the model
 useGLTF.preload(glbFile);
 
 export default OfferSaleModel;
