@@ -40,10 +40,10 @@ const Home = () => {
         </div>
       </section>
       <Hero />
-      <Variants />
+      {/* <Variants />
       <Brands />
       <UpgradeGun />
-      <Contact />
+      <Contact /> */}
     </div>
   );
 };
