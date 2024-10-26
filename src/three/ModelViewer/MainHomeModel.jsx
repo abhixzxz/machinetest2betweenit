@@ -177,13 +177,6 @@ const ModelViewer = ({ isActive }) => {
           </Canvas>
         </ErrorBoundary>
       </div>
-      {isMobile && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-white text-sm bg-red-500 bg-opacity-70 px-4 py-2 rounded-full">
-            3D interaction available on desktop only
-          </span>
-        </div>
-      )}
     </div>
   );
 };
