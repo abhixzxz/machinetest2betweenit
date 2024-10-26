@@ -14,7 +14,7 @@ const Hero = () => {
     "bg-pink-600",
   ];
 
-  const fullText = "BULLET FORGE";
+  const fullText = "BULLET FORGEX";
   const typingSpeed = 250;
 
   useEffect(() => {

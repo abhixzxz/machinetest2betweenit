@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ModelViewer from "../../three/ModelViewer/MainHomeModel";
 import { SiCocacola } from "react-icons/si";
 import Hero from "../Hero/Hero";
@@ -9,6 +9,8 @@ import Brands from "../Brands/Brands";
 import { Variants } from "../Variants/Variants";
 
 const Home = () => {
+  const [isModelActive, setIsModelActive] = useState(false);
+
   return (
     <div className="bg-black text-white overflow-hidden">
       <section className="relative min-h-screen flex items-center justify-center">
@@ -30,10 +32,21 @@ const Home = () => {
           </div>
 
           {/* 3D Model Layer (Front) */}
-          <div className="relative h-96 z-10">
+          <div className="relative z-10">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full">
-                <ModelViewer />
+              <div
+                className="w-full relative"
+                onMouseDown={() => setIsModelActive(true)}
+                onMouseLeave={() => setIsModelActive(false)}
+              >
+                <ModelViewer isActive={isModelActive} />
+                {!isModelActive && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-transparent cursor-pointer">
+                    <span className="text-white text-sm bg-red-500 bg-opacity-70 px-4 py-2 rounded-full">
+                      Click to interact with 3D model
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

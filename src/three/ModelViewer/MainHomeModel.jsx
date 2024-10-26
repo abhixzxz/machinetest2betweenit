@@ -59,30 +59,28 @@ const FallbackComponent = () => (
   </div>
 );
 
-const ModelViewer = () => {
+const ModelViewer = ({ isActive }) => {
   const [error, setError] = useState(null);
   const canvasRef = useRef(null);
-  const [isInteracting, setIsInteracting] = useState(false);
 
   useEffect(() => {
-    const handleWheel = (e) => {
-      if (!isInteracting) {
-        e.stopPropagation();
-        window.scrollBy(0, e.deltaY);
+    const handleScroll = (e) => {
+      if (!isActive) {
+        return; // Allow normal scrolling when model is not active
       }
     };
 
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.addEventListener("wheel", handleWheel, { passive: false });
+      canvas.addEventListener("wheel", handleScroll, { passive: true });
     }
 
     return () => {
       if (canvas) {
-        canvas.removeEventListener("wheel", handleWheel);
+        canvas.removeEventListener("wheel", handleScroll);
       }
     };
-  }, [isInteracting]);
+  }, [isActive]);
 
   const handleError = (error) => {
     console.error("Error in ModelViewer:", error);
@@ -98,8 +96,7 @@ const ModelViewer = () => {
       <div
         className="h-[80vh] w-full"
         ref={canvasRef}
-        onMouseEnter={() => setIsInteracting(true)}
-        onMouseLeave={() => setIsInteracting(false)}
+        style={{ pointerEvents: isActive ? "auto" : "none" }}
       >
         <ErrorBoundary
           FallbackComponent={FallbackComponent}
@@ -117,6 +114,7 @@ const ModelViewer = () => {
           >
             <PresentationControls
               global
+              enabled={isActive}
               zoom={1}
               rotation={[0, -Math.PI / 6, 0]}
               polar={[-Math.PI / 2, Math.PI / 2]}
@@ -153,9 +151,10 @@ const ModelViewer = () => {
             />
 
             <OrbitControls
-              enablePan={true}
-              enableZoom={true}
-              enableRotate={true}
+              enabled={isActive}
+              enablePan={isActive}
+              enableZoom={isActive}
+              enableRotate={isActive}
               maxPolarAngle={Math.PI - 0.5}
               minPolarAngle={0.2}
               maxDistance={15}
